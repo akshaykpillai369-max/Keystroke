@@ -647,6 +647,15 @@ export function clearEditor() {
   if (wordCount) wordCount.textContent = '';
   setSaveState('saved');
   emptyState.classList.remove('hidden');
+  var firstVisit = localStorage.getItem('keystroke-first-visit');
+  if (!firstVisit) {
+    localStorage.setItem('keystroke-first-visit', '1');
+    emptyState.querySelector('.landing').classList.remove('hidden');
+    emptyState.querySelector('.empty-simple').classList.add('hidden');
+  } else {
+    emptyState.querySelector('.landing').classList.add('hidden');
+    emptyState.querySelector('.empty-simple').classList.remove('hidden');
+  }
   editorContent.classList.add('hidden');
 }
 
