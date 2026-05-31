@@ -63,7 +63,7 @@ async function importNotes(file) {
 // Service worker
 function registerSW() {
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('/sw-offline.js', { scope: '/' }));
+    window.addEventListener('load', () => navigator.serviceWorker.register('/Keystroke/sw-offline.js', { scope: '/Keystroke/' }));
   }
 }
 

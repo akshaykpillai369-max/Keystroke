@@ -1,7 +1,19 @@
-const CACHE = 'notes-akshay-v1';
+const CACHE = 'notes-akshay-v2';
+const PRECACHE = [
+  '.',
+  'index.html',
+  'favicon-32.png',
+  'logo.png',
+  'manifest.json',
+  'icons/icon-192.png',
+  'icons/icon-512.png',
+];
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
+  e.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(PRECACHE))
+  );
 });
 
 self.addEventListener('activate', (e) => {
