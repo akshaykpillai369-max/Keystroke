@@ -205,7 +205,7 @@ initRouter(async (id, isNew) => {
       editorContent.classList.remove('hidden');
       animatePage(editorContent);
     } else if (isNew) {
-      clearEditor();
+      await clearEditor();
       const id = generateId();
       openNote({ id, title: '', body: '', createdAt: Date.now(), updatedAt: Date.now() });
       setMode(true);
