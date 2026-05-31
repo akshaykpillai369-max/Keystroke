@@ -129,12 +129,19 @@ document.getElementById('btn-settings').addEventListener('click', () => {
   if (window.location.hash === '#/settings') window.location.hash = '#/';
   else navigateToSettings();
 });
-document.getElementById('btn-new').addEventListener('click', () => { hideAllPages(); window.location.hash = '#/new'; });
+async function createNewNote() {
+  hideAllPages();
+  await clearEditor();
+  const id = generateId();
+  await openNote({ id, title: '', body: '', createdAt: Date.now(), updatedAt: Date.now() });
+  setMode(true);
+  setSelectedId(null);
+  editorContent.classList.remove('hidden');
+  animatePage(editorContent);
+}
+document.getElementById('btn-new').addEventListener('click', createNewNote);
 document.getElementById('empty-state').addEventListener('click', (e) => {
-  if (e.target.closest('#landing-cta')) {
-    hideAllPages();
-    window.location.hash = '#/new';
-  }
+  if (e.target.closest('#landing-cta')) createNewNote();
 });
 
 function showToast(msg) {
