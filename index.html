@@ -22,24 +22,20 @@
 <body>
 <script>
 document.addEventListener('keydown', function(e) {
-  if (!e.ctrlKey && !e.metaKey) return;
   var key = e.key.toLowerCase();
-  if (key === 'n') {
+  if (e.altKey && key === 'n') {
     e.preventDefault();
-    e.stopPropagation();
     window.location.hash = '#/new';
-  } else if (key === 'f') {
+  } else if ((e.ctrlKey || e.metaKey) && key === 'f') {
     e.preventDefault();
-    e.stopPropagation();
     var el = document.getElementById('search-input');
     if (el) el.focus();
-  } else if (key === 's') {
+  } else if ((e.ctrlKey || e.metaKey) && key === 's') {
     e.preventDefault();
-    e.stopPropagation();
     var evt = new CustomEvent('notes-save');
     window.dispatchEvent(evt);
   }
-}, { capture: true });
+}, true);
 </script>
   <div id="app">
     <aside id="sidebar">
@@ -74,7 +70,7 @@ document.addEventListener('keydown', function(e) {
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
             </svg>
           </button>
-          <button id="btn-new" class="icon-btn" title="New note (Ctrl+N)">
+          <button id="btn-new" class="icon-btn" title="New note (Alt+N)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
               <line x1="12" y1="5" x2="12" y2="19"/>
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -109,7 +105,7 @@ document.addEventListener('keydown', function(e) {
           <div class="landing-features">
             <div class="landing-feature">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              <span>Create notes with <kbd>Ctrl+N</kbd></span>
+              <span>Create notes with <kbd>Alt+N</kbd></span>
             </div>
             <div class="landing-feature">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
