@@ -113,7 +113,7 @@ window.addEventListener('notes-save', triggerSave);
 
 initSidebar(
   (id) => navigateToNote(id),
-  () => { clearEditor(); window.location.hash = '#/'; }
+  () => { window.location.hash = '#/'; }
 );
 
 initEditor(
@@ -189,41 +189,43 @@ function showSettings() {
 }
 
 initRouter(async (id, isNew) => {
-  if (id === 'about') showAbout();
-  else if (id === 'settings') showSettings();
-  else {
-    hideAllPages();
-    if (id) {
-      if (editorContent.classList.contains('page-enter')) {
-        editorContent.classList.remove('page-enter', 'page-enter-fast');
-        editorContent.classList.add('page-exit');
-        await new Promise(r => setTimeout(r, 120));
-        editorContent.classList.remove('page-exit');
+  try {
+    if (id === 'about') showAbout();
+    else if (id === 'settings') showSettings();
+    else {
+      hideAllPages();
+      if (id) {
+        if (editorContent.classList.contains('page-enter')) {
+          editorContent.classList.remove('page-enter', 'page-enter-fast');
+          editorContent.classList.add('page-exit');
+          await new Promise(r => setTimeout(r, 120));
+          editorContent.classList.remove('page-exit');
+        }
+        await openNote(id);
+        setSelectedId(id);
+        editorContent.classList.remove('hidden');
+        animatePage(editorContent);
+      } else if (isNew) {
+        await clearEditor();
+        const id = generateId();
+        await openNote({ id, title: '', body: '', createdAt: Date.now(), updatedAt: Date.now() });
+        setMode(true);
+        setSelectedId(null);
+        editorContent.classList.remove('hidden');
+        animatePage(editorContent);
+      } else {
+        await refreshNotes();
+        const hadContent = !editorContent.classList.contains('hidden');
+        if (hadContent) {
+          editorContent.classList.add('page-exit');
+          await new Promise(r => setTimeout(r, 120));
+          editorContent.classList.remove('page-exit');
+        }
+        await clearEditor();
+        setSelectedId(null);
       }
-      await openNote(id);
-      setSelectedId(id);
-      editorContent.classList.remove('hidden');
-      animatePage(editorContent);
-    } else if (isNew) {
-      await clearEditor();
-      const id = generateId();
-      openNote({ id, title: '', body: '', createdAt: Date.now(), updatedAt: Date.now() });
-      setMode(true);
-      setSelectedId(null);
-      editorContent.classList.remove('hidden');
-      animatePage(editorContent);
-    } else {
-      await refreshNotes();
-      const hadContent = !editorContent.classList.contains('hidden');
-      if (hadContent) {
-        editorContent.classList.add('page-exit');
-        await new Promise(r => setTimeout(r, 120));
-        editorContent.classList.remove('page-exit');
-      }
-      clearEditor();
-      setSelectedId(null);
     }
-  }
+  } catch (err) { console.error('Route error:', err); }
 });
 
 refreshNotes();
