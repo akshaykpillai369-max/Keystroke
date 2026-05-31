@@ -21,19 +21,21 @@
 </head>
 <body>
 <script>
-window.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function(e) {
   if (!e.ctrlKey && !e.metaKey) return;
-  var code = e.code;
   var key = e.key.toLowerCase();
-  if (code === 'KeyN' || key === 'n') {
+  if (key === 'n') {
     e.preventDefault();
+    e.stopPropagation();
     window.location.hash = '#/new';
-  } else if (code === 'KeyF' || key === 'f') {
+  } else if (key === 'f') {
     e.preventDefault();
+    e.stopPropagation();
     var el = document.getElementById('search-input');
     if (el) el.focus();
-  } else if (code === 'KeyS' || key === 's') {
+  } else if (key === 's') {
     e.preventDefault();
+    e.stopPropagation();
     var evt = new CustomEvent('notes-save');
     window.dispatchEvent(evt);
   }
