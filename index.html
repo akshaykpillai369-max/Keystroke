@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Fast, private, offline notes." />
+  <title>Keystroke</title>
+  <link rel="icon" type="image/png" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="stylesheet" href="/src/styles.css" />
+  <script>
+    (function() {
+      var theme = localStorage.getItem('notes-akshay-theme') || 'dark';
+      document.documentElement.dataset.theme = theme;
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = theme === 'dark' ? '#1c1c1e' : '#f5f5f7';
+    })();
+  </script>
+</head>
+<body>
+<script>
+window.addEventListener('keydown', function(e) {
+  if (!e.ctrlKey && !e.metaKey) return;
+  var code = e.code;
+  var key = e.key.toLowerCase();
+  if (code === 'KeyN' || key === 'n') {
+    e.preventDefault();
+    window.location.hash = '#/new';
+  } else if (code === 'KeyF' || key === 'f') {
+    e.preventDefault();
+    var el = document.getElementById('search-input');
+    if (el) el.focus();
+  } else if (code === 'KeyS' || key === 's') {
+    e.preventDefault();
+    var evt = new CustomEvent('notes-save');
+    window.dispatchEvent(evt);
+  }
+}, { capture: true });
+</script>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <img src="/logo.png" alt="Keystroke" class="sidebar-logo" />
+        <h1>Notes</h1>
+        <div class="sidebar-actions">
+          <button id="btn-sort" class="icon-btn" title="Sort notes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="6" x2="16" y2="6"/><line x1="4" y1="12" x2="12" y2="12"/>
+              <line x1="4" y1="18" x2="8" y2="18"/>
+            </svg>
+          </button>
+          <button id="btn-select" class="icon-btn" title="Select notes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </button>
+          <button id="btn-theme" class="icon-btn" title="Toggle theme">
+            <svg class="theme-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg class="theme-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+          <button id="btn-new" class="icon-btn" title="New note (Ctrl+N)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <input id="search-input" type="search" placeholder="Search notes..." autocomplete="off" />
+      <div id="selection-bar" class="selection-bar hidden">
+        <label class="select-all-label">
+          <input type="checkbox" id="select-all" />
+          <span id="selection-count"></span>
+        </label>
+        <button id="btn-delete-selected" class="btn-delete-selected">Delete</button>
+      </div>
+      <ul id="notes-list"></ul>
+      <div id="sidebar-empty" class="hidden">
+        <p>No notes yet &ndash; create your first one!</p>
+      </div>
+      <div id="sidebar-footer">
+        <button id="btn-settings" title="Settings">Settings</button>
+        <button id="btn-about" title="About">About</button>
+      </div>
+    </aside>
+    <div id="sidebar-resize-handle"></div>
+    <main id="editor">
+      <div id="empty-state">
+        <div class="landing">
+          <img src="/logo.png" alt="Keystroke" class="landing-logo-img" />
+          <h1 class="landing-title">Welcome to <span class="landing-brand">Keystroke</span></h1>
+          <p class="landing-subtitle">Your private, offline-first markdown notes app.</p>
+          <div class="landing-features">
+            <div class="landing-feature">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Create notes with <kbd>Ctrl+N</kbd></span>
+            </div>
+            <div class="landing-feature">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span>Search with <kbd>Ctrl+F</kbd></span>
+            </div>
+            <div class="landing-feature">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>Markdown with live preview</span>
+            </div>
+            <div class="landing-feature">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>100% offline &amp; private</span>
+            </div>
+          </div>
+          <button id="landing-cta" class="landing-cta">Create your first note</button>
+          <p class="landing-footer">All data stays on your device &mdash; no accounts, no tracking.</p>
+        </div>
+      </div>
+      <div id="about-page" class="hidden"></div>
+      <div id="settings-page" class="hidden"></div>
+      <div id="editor-content" class="hidden">
+        <input id="note-title" type="text" placeholder="Title" autocomplete="off" />
+        <div class="editor-toolbar">
+          <div class="mode-toggle">
+            <button id="btn-edit" class="mode-btn active">Edit</button>
+            <button id="btn-preview" class="mode-btn">Preview</button>
+          </div>
+          <div class="format-actions">
+            <button id="btn-bold" class="fmt-btn" title="Bold (Ctrl+B)"><strong>B</strong></button>
+            <button id="btn-italic" class="fmt-btn" title="Italic (Ctrl+I)"><em>I</em></button>
+            <button id="btn-underline" class="fmt-btn" title="Underline (Ctrl+U)"><u>U</u></button>
+            <span class="fmt-separator"></span>
+            <button id="btn-font-size" class="fmt-btn" title="Font size">T</button>
+            <button id="btn-image" class="fmt-btn" title="Insert image">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </button>
+            <span class="fmt-separator"></span>
+            <button id="btn-heading" class="fmt-btn" title="Insert heading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <polyline points="4 6 4 18"/><polyline points="20 6 20 18"/>
+                <line x1="4" y1="12" x2="20" y2="12"/>
+                <line x1="12" y1="6" x2="12" y2="18"/>
+              </svg>
+            </button>
+            <button id="btn-link" class="fmt-btn" title="Insert link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+            </button>
+            <button id="btn-list" class="fmt-btn" title="Insert bullet list">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </button>
+            <button id="btn-code" class="fmt-btn" title="Insert code block">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </button>
+            <button id="btn-undo" class="fmt-btn" title="Undo (Ctrl+Z)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+              </svg>
+            </button>
+            <button id="btn-redo" class="fmt-btn" title="Redo (Ctrl+Shift+Z)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+            </button>
+            <span class="fmt-separator"></span>
+            <button id="btn-fullscreen" class="fmt-btn" title="Toggle fullscreen (Ctrl+Shift+F)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+              </svg>
+            </button>
+          </div>
+          <button id="btn-pin" class="pin-btn" title="Pin note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/>
+            </svg>
+          </button>
+        </div>
+        <div id="editor-scroll">
+          <div class="editor-inner">
+            <div id="note-body" contenteditable="true" data-placeholder="Start writing..." spellcheck="false" autocorrect="off" autocapitalize="off" data-gramm="false"></div>
+            <div id="note-preview" class="hidden"></div>
+          </div>
+        </div>
+        <div class="editor-footer">
+          <div class="editor-stats">
+            <span id="note-meta"></span>
+            <span id="cursor-pos" class="cursor-pos"></span>
+            <span id="line-count" class="line-count"></span>
+            <span id="word-count" class="word-count"></span>
+          </div>
+          <span id="save-status" class="save-status"></span>
+          <div class="editor-actions">
+            <button id="btn-save-md" class="btn-secondary" title="Save as Markdown">Save as MD</button>
+            <button id="btn-save-txt" class="btn-secondary" title="Save as text file">Save as TXT</button>
+            <button id="btn-delete" class="btn-danger" title="Delete note">Delete</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div id="toast" class="toast hidden"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
