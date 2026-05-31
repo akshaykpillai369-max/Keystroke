@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import { getNote, addNote, updateNote, deleteNote } from '../db.js';
+import { getNote, addNote, updateNote, deleteNote, getAllNotes } from '../db.js';
 import { formatDate, generateId } from '../utils.js';
 
 const titleInput = document.getElementById('note-title');
@@ -635,7 +635,7 @@ export async function openNote(idOrNote) {
   setMode(true);
 }
 
-export function clearEditor() {
+export async function clearEditor() {
   clearTimeout(saveTimeout);
   saveTimeout = null;
   currentNote = null;
@@ -647,15 +647,10 @@ export function clearEditor() {
   if (wordCount) wordCount.textContent = '';
   setSaveState('saved');
   emptyState.classList.remove('hidden');
-  var firstVisit = localStorage.getItem('keystroke-first-visit');
-  if (!firstVisit) {
-    localStorage.setItem('keystroke-first-visit', '1');
-    emptyState.querySelector('.landing').classList.remove('hidden');
-    emptyState.querySelector('.empty-simple').classList.add('hidden');
-  } else {
-    emptyState.querySelector('.landing').classList.add('hidden');
-    emptyState.querySelector('.empty-simple').classList.remove('hidden');
-  }
+  emptyState.querySelector('.landing').classList.remove('hidden');
+  const allNotes = await getAllNotes();
+  const cta = emptyState.querySelector('#landing-cta');
+  cta.textContent = allNotes.length === 0 ? 'Create your first note' : 'Create note';
   editorContent.classList.add('hidden');
 }
 
