@@ -317,7 +317,7 @@ a { color: var(--accent); text-decoration: none; }
   .mode-btn { font-size: 12px; padding: 4px 12px; }
   .pin-btn { min-width: 34px; height: 34px; }
   .fmt-separator { display: none; }
-  #btn-font-size, #btn-image, #btn-heading, #btn-link, #btn-list, #btn-code, #btn-undo, #btn-redo, #btn-fullscreen { display: none; }
+  #btn-font-size, #btn-image, #btn-heading, #btn-link, #btn-list, #btn-code, #btn-undo, #btn-redo { display: none; }
   .sidebar-footer button { font-size: 12px; padding: 6px 12px; }
   .selection-bar { padding: 6px 10px; }
   #toast { font-size: 13px; padding: 8px 16px; bottom: 12px; }
@@ -1045,6 +1045,7 @@ a { color: var(--accent); text-decoration: none; }
   inset: -40px -40px auto -40px;
   height: 200px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   pointer-events: none;
@@ -1061,6 +1062,18 @@ a { color: var(--accent); text-decoration: none; }
   white-space: nowrap;
   line-height: 1;
   transform: rotate(-8deg);
+}
+.landing-watermark::after {
+  content: 'by Akshay';
+  font-size: clamp(14px, 3vw, 28px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--border);
+  opacity: 0.15;
+  white-space: nowrap;
+  text-transform: uppercase;
+  transform: rotate(-8deg);
+  margin-top: 8px;
 }
 
 .landing-logo,
