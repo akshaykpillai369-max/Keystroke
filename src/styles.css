@@ -246,17 +246,60 @@ a { color: var(--accent); text-decoration: none; }
 #editor-content.hidden,
 #empty-state.hidden { display: none; }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   #app { flex-direction: column; }
   #sidebar {
     width: 100% !important;
     min-width: unset;
-    max-height: 40vh;
+    max-height: 35vh;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
   #sidebar-resize-handle { display: none; }
-  #editor-content { padding: 16px; }
+  #editor-content { padding: 12px; }
+  #empty-state { overflow-y: auto; }
+  .editor-toolbar { overflow-x: auto; flex-wrap: nowrap; gap: 4px; padding: 4px 0; }
+  .format-actions { flex: 1; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fmt-btn, .mode-btn { flex-shrink: 0; min-width: 36px; height: 36px; font-size: 13px; }
+  .editor-inner { max-width: 100%; }
+  .editor-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .editor-stats { flex-wrap: wrap; gap: 4px 12px; font-size: 11px; }
+  .editor-actions { width: 100%; display: flex; gap: 6px; }
+  .editor-actions button { flex: 1; font-size: 12px; padding: 8px; }
+  #note-title { font-size: 20px; }
+  .landing-logo-img { max-width: 180px; }
+  .landing-subtitle { margin-bottom: 12px; }
+  .landing-features { gap: 6px; margin-bottom: 12px; }
+  .landing-feature { font-size: 12px; padding: 6px 10px; gap: 8px; }
+  .landing-feature svg { width: 16px; height: 16px; }
+}
+
+@media (max-width: 480px) {
+  #sidebar { max-height: 30vh; }
+  .sidebar-header { padding: 10px 12px 6px; }
+  .sidebar-logo { height: 20px; margin-right: 6px; }
+  .sidebar-header h1 { font-size: 17px; }
+  .sidebar-actions { gap: 2px; }
+  .sidebar-actions .icon-btn { width: 30px; height: 30px; }
+  #search-input { padding: 8px 12px; font-size: 13px; margin: 4px 10px; }
+  #notes-list { padding: 4px 8px; }
+  .note-item { padding: 10px 12px; }
+  .note-item-title { font-size: 14px; }
+  .landing { padding: 12px 16px; }
+  .landing-title { font-size: 20px; }
+  .landing-subtitle { font-size: 13px; }
+  .landing-cta { padding: 10px 20px; font-size: 13px; width: 100%; }
+  .landing-logo-img { max-width: 140px; }
+  #note-body { font-size: 15px; min-height: 120px; }
+  #note-preview { font-size: 15px; }
+  .editor-toolbar { gap: 2px; padding: 4px 0; }
+  .fmt-btn, .mode-btn { min-width: 32px; height: 32px; font-size: 12px; padding: 0 6px; }
+  .mode-btn { font-size: 12px; padding: 4px 10px; }
+  .pin-btn { min-width: 32px; height: 32px; }
+  .fmt-separator { margin: 0 2px; }
+  .sidebar-footer button { font-size: 12px; padding: 6px 12px; }
+  .selection-bar { padding: 6px 10px; }
+  #toast { font-size: 13px; padding: 8px 16px; bottom: 12px; }
 }
 
 /* --- Sidebar --- */
