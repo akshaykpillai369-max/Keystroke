@@ -33,10 +33,27 @@ Built as a Progressive Web App (PWA) — works offline, installable on desktop a
 - [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) — PWA support
 - Vanilla JavaScript — no framework
 
-## Getting Started
+## Installation
+
+Ensure you have Node.js installed on your machine.
 
 ```bash
+# Clone the repository
+git clone https://github.com/akshaykpillai369-max/Keystroke.git
+```
+
+```bash
+# Navigate to the project directory
+cd Keystroke
+```
+
+```bash
+# Install dependencies
 npm install
+```
+
+```bash
+# Start the development server
 npm run dev
 ```
 
@@ -58,7 +75,7 @@ npm run preview
 
 ## Usage
 
-- **New note** — click the `+` button or press `Ctrl+N`
+- **New note** — click the `+` button or press `Alt+N`
 - **Search** — press `Ctrl+F` or type in the search bar
 - **Pin** — click the star icon or right-click → Pin note
 - **Delete** — right-click → Delete note, or select mode → bulk delete
