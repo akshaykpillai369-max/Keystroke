@@ -1,4 +1,4 @@
-const CACHE = 'notes-akshay-v2';
+const CACHE = 'notes-akshay-v3';
 const PRECACHE = [
   '.',
   'index.html',
@@ -20,7 +20,7 @@ self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    )
+    ).then(() => self.clients.claim())
   );
 });
 
