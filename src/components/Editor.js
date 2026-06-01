@@ -403,6 +403,36 @@ export function initEditor(onNoteDeleted, onNoteSaved) {
     }
   });
 
+  let autoReplacing = false;
+  bodyEditor.addEventListener('input', () => {
+    if (autoReplacing) return;
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    if (!range.collapsed) return;
+    const node = range.startContainer;
+    if (node.nodeType !== Node.TEXT_NODE) return;
+    const offset = range.startOffset;
+    if (offset < 2) return;
+    const text = node.textContent;
+    const prev2 = text.slice(offset - 2, offset);
+    let replacement = null;
+    if (prev2 === '.,') replacement = '•';
+    else if (prev2 === '=>' || prev2 === '->') replacement = '→';
+    if (!replacement) return;
+    autoReplacing = true;
+    node.textContent = text.slice(0, offset - 2) + replacement + text.slice(offset);
+    const r = document.createRange();
+    r.setStart(node, offset - 1);
+    r.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(r);
+    updateBulletClass();
+    updateCursorPos();
+    scheduleSave();
+    autoReplacing = false;
+  });
+
   btnEdit.addEventListener('click', () => setMode(true));
   btnPreview.addEventListener('click', () => setMode(false));
 
