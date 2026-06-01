@@ -312,11 +312,12 @@ a { color: var(--accent); text-decoration: none; }
   .landing-logo-img { max-width: 140px; }
   #note-body { font-size: 15px; min-height: 120px; }
   #note-preview { font-size: 15px; }
-  .editor-toolbar { gap: 2px; padding: 4px 0; flex-wrap: nowrap; }
-  .fmt-btn, .mode-btn { min-width: 32px; height: 32px; font-size: 12px; padding: 0 6px; }
-  .mode-btn { font-size: 12px; padding: 4px 10px; }
-  .pin-btn { min-width: 32px; height: 32px; }
-  .fmt-separator { margin: 0 2px; }
+  .editor-toolbar { gap: 6px; padding: 6px 0; flex-wrap: nowrap; }
+  .fmt-btn, .mode-btn { min-width: 34px; height: 34px; font-size: 13px; padding: 0 8px; }
+  .mode-btn { font-size: 12px; padding: 4px 12px; }
+  .pin-btn { min-width: 34px; height: 34px; }
+  .fmt-separator { display: none; }
+  #btn-font-size, #btn-image, #btn-heading, #btn-link, #btn-list, #btn-code, #btn-undo, #btn-redo, #btn-fullscreen { display: none; }
   .sidebar-footer button { font-size: 12px; padding: 6px 12px; }
   .selection-bar { padding: 6px 10px; }
   #toast { font-size: 13px; padding: 8px 16px; bottom: 12px; }
