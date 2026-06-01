@@ -1202,6 +1202,18 @@ a { color: var(--accent); text-decoration: none; }
   color: var(--text-muted);
 }
 
+.landing-made-by {
+  margin-top: 20px;
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+
+@media (min-width: 481px) {
+  #landing-notes { display: none; }
+}
+
 /* Toast */
 
 .toast {
