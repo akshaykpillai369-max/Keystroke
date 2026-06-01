@@ -1063,18 +1063,7 @@ a { color: var(--accent); text-decoration: none; }
   line-height: 1;
   transform: rotate(-8deg);
 }
-.landing-watermark::after {
-  content: 'by Akshay';
-  font-size: clamp(14px, 3vw, 28px);
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  color: var(--border);
-  opacity: 0.15;
-  white-space: nowrap;
-  text-transform: uppercase;
-  transform: rotate(-8deg);
-  margin-top: 8px;
-}
+
 
 .landing-logo,
 .landing-logo-img {
@@ -1160,6 +1149,15 @@ a { color: var(--accent); text-decoration: none; }
   color: var(--text-muted);
 }
 
+.landing-credit {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
 .landing-cta {
   display: inline-block;
   padding: 10px 28px;
@@ -1202,24 +1200,6 @@ a { color: var(--accent); text-decoration: none; }
   margin-top: 12px;
   font-size: 11px;
   color: var(--text-muted);
-}
-
-/* Splash screen */
-.splash {
-  position: fixed; inset: 0; z-index: 9999;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: var(--bg);
-  transition: opacity 0.4s ease;
-}
-.splash.hide { opacity: 0; pointer-events: none; }
-.splash-logo { max-width: 180px; height: auto; margin-bottom: 16px; }
-.splash-name {
-  font-size: 18px; font-weight: 600; color: var(--text-muted);
-  letter-spacing: 0.15em; text-transform: uppercase;
-}
-
-@media (min-width: 481px) {
-  .splash { display: none; }
 }
 
 /* Toast */
