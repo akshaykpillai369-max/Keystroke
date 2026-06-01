@@ -4,6 +4,9 @@ A fast, private, offline-first markdown notes app with rich-text editing, image 
 
 Built as a Progressive Web App (PWA) — works offline, installable on desktop and mobile.
 
+<img width="684" height="594" alt="image" src="https://github.com/user-attachments/assets/0cbb8263-5c1c-4859-8514-03c35d465c37" />
+
+
 ## Features
 
 - **Markdown editing** with live preview toggle
