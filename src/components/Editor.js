@@ -649,8 +649,11 @@ export async function clearEditor() {
   emptyState.classList.remove('hidden');
   emptyState.querySelector('.landing').classList.remove('hidden');
   const allNotes = await getAllNotes();
+  const hasNotes = allNotes.length > 0;
   const cta = emptyState.querySelector('#landing-cta');
-  cta.textContent = allNotes.length === 0 ? 'Create your first note' : 'Create note';
+  cta.textContent = hasNotes ? 'Create note' : 'Create your first note';
+  const viewBtn = emptyState.querySelector('#landing-notes');
+  viewBtn.classList.toggle('hidden', !hasNotes);
   editorContent.classList.add('hidden');
 }
 

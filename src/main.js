@@ -163,6 +163,7 @@ async function createNewNote() {
 document.getElementById('btn-new').addEventListener('click', createNewNote);
 document.getElementById('empty-state').addEventListener('click', (e) => {
   if (e.target.closest('#landing-cta')) createNewNote();
+  if (e.target.closest('#landing-notes')) toggleSidebar(true);
 });
 
 function showToast(msg) {
