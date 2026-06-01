@@ -109,6 +109,20 @@ const aboutPage = document.getElementById('about-page');
 const settingsPage = document.getElementById('settings-page');
 const editorContent = document.getElementById('editor-content');
 
+function toggleSidebar(open) {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  sidebar.classList.toggle('open', open);
+  backdrop.classList.toggle('visible', open);
+}
+document.getElementById('btn-menu').addEventListener('click', () => toggleSidebar(true));
+document.getElementById('sidebar-backdrop').addEventListener('click', () => toggleSidebar(false));
+// close sidebar when a note is tapped on mobile
+document.getElementById('sidebar').addEventListener('click', (e) => {
+  const noteItem = e.target.closest('.note-item');
+  if (noteItem && window.innerWidth <= 480) toggleSidebar(false);
+});
+
 window.addEventListener('notes-save', triggerSave);
 
 initSidebar(
