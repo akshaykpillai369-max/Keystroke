@@ -274,6 +274,14 @@ a { color: var(--accent); text-decoration: none; }
   .landing-feature svg { width: 16px; height: 16px; }
 }
 
+@media (max-width: 900px) and (orientation: landscape) {
+  #sidebar { max-height: 100vh; width: 240px !important; border-bottom: none; border-right: 1px solid var(--border); }
+  #app { flex-direction: row; }
+  #sidebar-resize-handle { display: block; }
+  .landing { padding: 16px 24px; }
+  .landing-logo-img { max-width: 160px; }
+}
+
 @media (max-width: 480px) {
   #sidebar { max-height: 30vh; }
   .sidebar-header { padding: 10px 12px 6px; }
