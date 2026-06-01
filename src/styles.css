@@ -976,6 +976,19 @@ a { color: var(--accent); text-decoration: none; }
   width: 100%;
 }
 
+.back-btn {
+  display: none;
+  background: none; border: 1px solid var(--border); color: var(--text-secondary); font-size: 14px;
+  padding: 8px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 16px;
+  transition: background 0.15s, color 0.15s;
+}
+.back-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+@media (max-width: 480px) {
+  #about-page { padding: 16px; }
+  .back-btn { display: inline-block; }
+}
+
 #about-page.hidden { display: none; }
 
 .about-section {

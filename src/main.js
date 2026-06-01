@@ -71,6 +71,7 @@ function registerSW() {
 function renderAbout(container) {
   container.innerHTML = `
     <div class="about-page">
+      <button class="back-btn" id="btn-back-about">← Back</button>
       <section class="about-section">
         <h2>About the App</h2>
         <p class="app-version">Version ${pkg.version}</p>
@@ -82,10 +83,14 @@ function renderAbout(container) {
         <p><strong>Akshay</strong> &mdash; a cyber security student who <span class="vibe-coded">vibe coded</span> this entire app. Built purely for the love of building, with zero dependencies on cloud services or third-party tracking.</p>
       </section>
     </div>`;
+  document.getElementById('btn-back-about').addEventListener('click', goHome);
 }
+function goHome() { window.location.hash = '#/'; }
+
 function renderSettings(container, handlers) {
   container.innerHTML = `
     <div class="about-page">
+      <button class="back-btn" id="btn-back-settings">← Back</button>
       <section class="about-section">
         <h2>Data Management</h2>
         <p>Export your notes as a JSON backup, or import a previously exported backup.</p>
@@ -96,6 +101,7 @@ function renderSettings(container, handlers) {
         <input id="file-import" type="file" accept=".json" class="hidden" />
       </section>
     </div>`;
+  document.getElementById('btn-back-settings').addEventListener('click', goHome);
   document.getElementById('btn-export').addEventListener('click', handlers.export);
   document.getElementById('btn-import').addEventListener('click', () => document.getElementById('file-import').click());
   document.getElementById('file-import').addEventListener('change', (e) => {
@@ -144,6 +150,7 @@ document.getElementById('btn-settings').addEventListener('click', () => {
   else navigateToSettings();
 });
 async function createNewNote() {
+  toggleSidebar(false);
   hideAllPages();
   await clearEditor();
   const id = generateId();
@@ -179,6 +186,7 @@ function hideAllPages() {
 }
 
 function showAbout() {
+  toggleSidebar(false);
   hideAllPages();
   aboutPage.classList.remove('hidden');
   editorContent.classList.add('hidden');
@@ -189,6 +197,7 @@ function showAbout() {
 }
 
 function showSettings() {
+  toggleSidebar(false);
   hideAllPages();
   settingsPage.classList.remove('hidden');
   editorContent.classList.add('hidden');
