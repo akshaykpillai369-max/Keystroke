@@ -262,6 +262,12 @@ initRouter(async (id, isNew) => {
 refreshNotes();
 registerSW();
 
+// Hide splash screen on mobile after init
+setTimeout(() => {
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => document.getElementById('splash').remove(), 500);
+}, 600);
+
 // Sidebar resize
 (function() {
   const handle = document.getElementById('sidebar-resize-handle');
