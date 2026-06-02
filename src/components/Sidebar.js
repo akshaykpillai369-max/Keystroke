@@ -20,6 +20,8 @@ let onSelect = null;
 let onDelete = null;
 let sortKey = 'updated';
 let sortMenu = null;
+let dateFilter = null;
+let dateFilterBar = null;
 
 const SORT_OPTIONS = [
   { key: 'updated', label: 'Recently modified' },
@@ -31,7 +33,10 @@ const SORT_OPTIONS = [
 export function initSidebar(onNoteSelect, onNoteDelete) {
   onSelect = onNoteSelect;
   onDelete = onNoteDelete;
-  searchInput.addEventListener('input', () => render());
+  searchInput.addEventListener('input', () => {
+    if (searchInput.value.trim()) clearDateFilter();
+    render();
+  });
 
   btnSelect.addEventListener('click', () => {
     selectMode = !selectMode;
@@ -87,6 +92,12 @@ export function initSidebar(onNoteSelect, onNoteDelete) {
     showSortMenu();
   });
 
+  dateFilterBar = document.createElement('div');
+  dateFilterBar.className = 'date-filter-bar hidden';
+  dateFilterBar.innerHTML = '<span class="date-filter-label"></span><button class="date-filter-clear">×</button>';
+  dateFilterBar.querySelector('.date-filter-clear').addEventListener('click', clearDateFilter);
+  sidebar.insertBefore(dateFilterBar, notesList);
+
   document.addEventListener('click', (e) => {
     if (contextMenu && !contextMenu.contains(e.target)) {
       hideContextMenu();
@@ -95,6 +106,22 @@ export function initSidebar(onNoteSelect, onNoteDelete) {
       hideSortMenu();
     }
   });
+}
+
+export function setDateFilter(dateStr) {
+  dateFilter = dateStr;
+  const d = new Date(dateStr + 'T12:00:00');
+  const label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  dateFilterBar.querySelector('.date-filter-label').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + label;
+  dateFilterBar.classList.remove('hidden');
+  searchInput.value = '';
+  render();
+}
+
+export function clearDateFilter() {
+  dateFilter = null;
+  dateFilterBar.classList.add('hidden');
+  render();
 }
 
 function getVisibleNotes() {
@@ -179,6 +206,13 @@ async function render() {
     );
   } else {
     notes = allNotes;
+  }
+  if (dateFilter) {
+    notes = notes.filter(n => {
+      const d = new Date(n.createdAt);
+      const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      return key === dateFilter;
+    });
   }
   notes = sortNotes(notes);
   notesList.innerHTML = '';

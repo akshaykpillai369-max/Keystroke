@@ -1,7 +1,7 @@
-import { getAllNotesRaw, clearAndImportNotes } from './db.js';
-import { initSidebar, refreshNotes, setSelectedId, updateNoteInList, removeNoteFromList } from './components/Sidebar.js';
+import { getAllNotesRaw, clearAndImportNotes, getNotesGroupedByDate } from './db.js';
+import { initSidebar, refreshNotes, setSelectedId, updateNoteInList, removeNoteFromList, setDateFilter } from './components/Sidebar.js';
 import { initEditor, openNote, clearEditor, setMode, triggerSave } from './components/Editor.js';
-import { generateId } from './utils.js';
+import { generateId, formatDate } from './utils.js';
 import pkg from '../package.json';
 
 // Theme
@@ -30,6 +30,7 @@ function handleRoute() {
   else if (parts[0] === 'new') onRoute(null, true);
   else if (parts[0] === 'about') onRoute('about');
   else if (parts[0] === 'settings') onRoute('settings');
+  else if (parts[0] === 'calendar') onRoute('calendar');
   else onRoute(null);
 }
 function initRouter(cb) { onRoute = cb; window.addEventListener('hashchange', handleRoute); handleRoute(); }
@@ -37,6 +38,7 @@ function initRouter(cb) { onRoute = cb; window.addEventListener('hashchange', ha
 function navigateToNote(id) { window.location.hash = '#/note/' + id; }
 function navigateToAbout() { window.location.hash = '#/about'; }
 function navigateToSettings() { window.location.hash = '#/settings'; }
+function navigateToCalendar() { window.location.hash = '#/calendar'; }
 
 // Data export/import
 async function exportNotes() {
@@ -110,9 +112,128 @@ function renderSettings(container, handlers) {
   });
 }
 
+// Calendar
+let calYear, calMonth;
+function renderCalendarPage(container) {
+  const now = new Date();
+  if (!calYear) calYear = now.getFullYear();
+  if (calMonth === undefined) calMonth = now.getMonth();
+
+  getNotesGroupedByDate().then(notesByDate => {
+    container.innerHTML = '';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'calendar-wrapper';
+
+    const header = document.createElement('div');
+    header.className = 'cal-header';
+
+    const backBtn = document.createElement('button');
+    backBtn.className = 'back-btn cal-back';
+    backBtn.textContent = '← Back';
+    backBtn.addEventListener('click', goHome);
+    header.appendChild(backBtn);
+
+    const nav = document.createElement('div');
+    nav.className = 'cal-nav';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'cal-nav-btn';
+    prevBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    prevBtn.addEventListener('click', () => { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendarPage(container); });
+
+    const monthLabel = document.createElement('span');
+    monthLabel.className = 'cal-month-label';
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    monthLabel.textContent = months[calMonth] + ' ' + calYear;
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'cal-nav-btn';
+    nextBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
+    nextBtn.addEventListener('click', () => { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendarPage(container); });
+
+    nav.appendChild(prevBtn);
+    nav.appendChild(monthLabel);
+    nav.appendChild(nextBtn);
+    header.appendChild(nav);
+    wrapper.appendChild(header);
+
+    const daysHeader = document.createElement('div');
+    daysHeader.className = 'cal-days-header';
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+      const el = document.createElement('span');
+      el.className = 'cal-day-name';
+      el.textContent = d;
+      daysHeader.appendChild(el);
+    });
+    wrapper.appendChild(daysHeader);
+
+    const grid = document.createElement('div');
+    grid.className = 'cal-grid';
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date();
+    const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'cal-cell cal-empty';
+      grid.appendChild(empty);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = calYear + '-' + String(calMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell';
+      if (dateStr === todayStr) cell.classList.add('cal-today');
+
+      const notes = notesByDate[dateStr];
+      if (notes && notes.length) {
+        cell.classList.add('cal-has-notes');
+      }
+
+      const num = document.createElement('span');
+      num.className = 'cal-day-num';
+      num.textContent = d;
+      cell.appendChild(num);
+
+      if (notes && notes.length) {
+        const dot = document.createElement('span');
+        dot.className = 'cal-dot';
+        dot.textContent = notes.length;
+        cell.appendChild(dot);
+      }
+
+      cell.addEventListener('click', () => {
+        setDateFilter(dateStr);
+        goHome();
+      });
+
+      grid.appendChild(cell);
+    }
+
+    wrapper.appendChild(grid);
+    container.appendChild(wrapper);
+    animatePage(container);
+  });
+}
+
+function showCalendar() {
+  toggleSidebar(false);
+  hideAllPages();
+  const calPage = document.getElementById('calendar-page');
+  calPage.classList.remove('hidden');
+  calPage.classList.remove('page-enter');
+  editorContent.classList.add('hidden');
+  document.getElementById('empty-state').classList.add('hidden');
+  renderCalendarPage(calPage);
+  setSelectedId(null);
+}
+
 // App state
 const aboutPage = document.getElementById('about-page');
 const settingsPage = document.getElementById('settings-page');
+const calendarPage = document.getElementById('calendar-page');
 const editorContent = document.getElementById('editor-content');
 
 function toggleSidebar(open) {
@@ -141,6 +262,10 @@ initEditor(
   (note) => { updateNoteInList(note); refreshNotes(); }
 );
 
+document.getElementById('btn-calendar').addEventListener('click', () => {
+  if (window.location.hash === '#/calendar') window.location.hash = '#/';
+  else navigateToCalendar();
+});
 document.getElementById('btn-about').addEventListener('click', () => {
   if (window.location.hash === '#/about') window.location.hash = '#/';
   else navigateToAbout();
@@ -182,8 +307,10 @@ function animatePage(el) {
 function hideAllPages() {
   aboutPage.classList.add('hidden');
   settingsPage.classList.add('hidden');
+  calendarPage.classList.add('hidden');
   aboutPage.classList.remove('page-enter');
   settingsPage.classList.remove('page-enter');
+  calendarPage.classList.remove('page-enter');
 }
 
 function showAbout() {
@@ -223,6 +350,7 @@ initRouter(async (id, isNew) => {
   try {
     if (id === 'about') showAbout();
     else if (id === 'settings') showSettings();
+    else if (id === 'calendar') showCalendar();
     else {
       hideAllPages();
       if (id) {

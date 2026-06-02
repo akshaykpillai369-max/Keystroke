@@ -74,6 +74,19 @@ export async function clearAndImportNotes(notes) {
   await tx.done;
 }
 
+export async function getNotesGroupedByDate() {
+  const db = await getDb();
+  const all = await db.getAll(STORE_NAME);
+  const map = {};
+  all.forEach(n => {
+    const d = new Date(n.createdAt);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    if (!map[key]) map[key] = [];
+    map[key].push(n);
+  });
+  return map;
+}
+
 export async function searchNotes(query) {
   const db = await getDb();
   const all = await db.getAll(STORE_NAME);
