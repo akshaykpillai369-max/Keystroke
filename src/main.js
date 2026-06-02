@@ -206,6 +206,7 @@ function renderCalendarPage(container) {
 
       cell.addEventListener('click', () => {
         setDateFilter(dateStr);
+        if (window.innerWidth <= 480) toggleSidebar(true);
       });
 
       grid.appendChild(cell);
