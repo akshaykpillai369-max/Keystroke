@@ -206,7 +206,6 @@ function renderCalendarPage(container) {
 
       cell.addEventListener('click', () => {
         setDateFilter(dateStr);
-        goHome();
       });
 
       grid.appendChild(cell);
