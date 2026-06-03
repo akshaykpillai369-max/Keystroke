@@ -14,6 +14,7 @@ Built as a Progressive Web App (PWA) — works offline, installable on desktop a
 - **Keyboard shortcuts** — `Ctrl+N` (new note), `Ctrl+F` (search), `Ctrl+S` (save)
 - **Pin notes** — keep important notes at the top
 - **Search** — filter notes by title and body
+- **Calendar view** — monthly grid showing which dates have notes; click a date to filter notes by that day
 - **Bulk select & delete** with undo
 - **Export** — save notes as `.txt` (plain text) or `.md` (markdown)
 - **Import/Export** — full backup as JSON
@@ -67,6 +68,7 @@ npm run preview
 - **Save as** — use the buttons in the editor footer to save as `.txt` or `.md`
 - **Theme** — click the moon/sun icon to switch between dark and light mode
 - **Fullscreen** — click the fullscreen icon to hide the sidebar
+- **Calendar** — click Calendar in the sidebar to see a monthly view; tap a date to filter notes for that day
 - **Settings** — export/import all notes as JSON backup
 
 ## PWA
