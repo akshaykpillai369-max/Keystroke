@@ -362,6 +362,7 @@ a { color: var(--accent); text-decoration: none; }
   .data-actions .btn-secondary { width: 100%; text-align: center; }
   .landing-feature { padding: 10px 12px; }
   .context-menu, .sort-menu { left: 12px !important; right: 12px !important; width: auto; }
+  .landing-features { display: none; }
 }
 
 .menu-btn { display: none; }
