@@ -297,6 +297,7 @@ a { color: var(--accent); text-decoration: none; }
   .cal-cell { min-height: 36px; }
   .back-btn { display: inline-block; }
   .menu-btn { display: inline-flex; }
+  .landing-features { display: none; }
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
