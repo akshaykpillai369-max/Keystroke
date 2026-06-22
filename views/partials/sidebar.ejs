@@ -1,0 +1,127 @@
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col py-base bg-surface-dim/80 backdrop-blur-xl border-r border-outline-variant/10 shadow-sm z-50">
+  <div class="px-6 py-8">
+    <h1 class="font-headline-lg text-headline-lg font-semibold ai-gradient-text">Lumina AI</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant opacity-70">Intelligent Focus</p>
+  </div>
+
+  <nav class="flex-1 px-4 space-y-2">
+    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl active:scale-[0.98] <%= activePage === 'daily' ? 'text-primary font-semibold border-r-2 border-primary bg-surface-variant/20' : 'text-on-surface-variant font-medium hover:bg-surface-variant/50' %> transition-all duration-200">
+      <span class="material-symbols-outlined">today</span>
+      <span class="font-label-md text-label-md">Daily Overview</span>
+    </a>
+    <a href="/categories" class="flex items-center gap-3 px-4 py-3 rounded-xl active:scale-[0.98] <%= activePage === 'categories' ? 'text-primary font-semibold border-r-2 border-primary bg-surface-variant/20' : 'text-on-surface-variant font-medium hover:bg-surface-variant/50' %> transition-all duration-200">
+      <span class="material-symbols-outlined">auto_awesome_motion</span>
+      <span class="font-label-md text-label-md">Smart Categories</span>
+    </a>
+    <a href="/projects" class="flex items-center gap-3 px-4 py-3 rounded-xl active:scale-[0.98] <%= activePage === 'projects' ? 'text-primary font-semibold border-r-2 border-primary bg-surface-variant/20' : 'text-on-surface-variant font-medium hover:bg-surface-variant/50' %> transition-all duration-200">
+      <span class="material-symbols-outlined">folder_open</span>
+      <span class="font-label-md text-label-md">Projects</span>
+    </a>
+    <a href="/timer" class="flex items-center gap-3 px-4 py-3 rounded-xl active:scale-[0.98] <%= activePage === 'timer' ? 'text-primary font-semibold border-r-2 border-primary bg-surface-variant/20' : 'text-on-surface-variant font-medium hover:bg-surface-variant/50' %> transition-all duration-200">
+      <span class="material-symbols-outlined">timer</span>
+      <span class="font-label-md text-label-md">Focus Timer</span>
+    </a>
+    <a href="/notes" class="flex items-center gap-3 px-4 py-3 rounded-xl active:scale-[0.98] <%= activePage === 'notes' ? 'text-primary font-semibold border-r-2 border-primary bg-surface-variant/20' : 'text-on-surface-variant font-medium hover:bg-surface-variant/50' %> transition-all duration-200">
+      <span class="material-symbols-outlined">edit_note</span>
+      <span class="font-label-md text-label-md">Notes</span>
+    </a>
+  </nav>
+
+  <div class="px-4 mb-6">
+    <button id="btnGlobalTask" class="w-full py-3 bg-primary text-on-primary font-semibold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+      <span class="material-symbols-outlined">add</span>
+      <span>New Task</span>
+    </button>
+  </div>
+
+  <div class="px-4 pb-6 space-y-1 border-t border-outline-variant/10 pt-4">
+    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant font-medium hover:bg-surface-variant/50 active:scale-[0.98] transition-all rounded-xl">
+      <span class="material-symbols-outlined">help_outline</span>
+      <span class="font-label-md text-label-md">Support</span>
+    </a>
+    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant font-medium hover:bg-surface-variant/50 active:scale-[0.98] transition-all rounded-xl">
+      <span class="material-symbols-outlined">archive</span>
+      <span class="font-label-md text-label-md">Archive</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Task Modal -->
+<div id="taskModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] hidden" style="background: rgba(3, 20, 39, 0.8);">
+  <div class="glass-card p-8 rounded-3xl w-full max-w-md" style="background: rgba(16, 32, 52, 0.95);">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface">Create Task</h2>
+      <button id="closeModal" class="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer">close</button>
+    </div>
+    <form id="taskForm" class="space-y-4">
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant block mb-2">Title</label>
+        <input id="taskTitle" type="text" required placeholder="What needs to be done?" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface font-body-md focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all outline-none placeholder:text-on-surface-variant/40" />
+      </div>
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant block mb-2">Description</label>
+        <textarea id="taskDesc" rows="2" placeholder="Optional details..." class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface font-body-md focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all outline-none placeholder:text-on-surface-variant/40"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="font-label-md text-label-md text-on-surface-variant block mb-2">Category</label>
+          <select id="taskCategory" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface font-body-md focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none">
+            <option value="Auto">Auto-detect</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Side Project">Side Project</option>
+            <option value="Health">Health</option>
+            <option value="Uncategorized">Uncategorized</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-label-md text-label-md text-on-surface-variant block mb-2">Priority</label>
+          <select id="taskPriority" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface font-body-md focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="w-full py-3 bg-primary text-on-primary font-semibold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20">Create Task</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('taskModal');
+  const btn = document.getElementById('btnGlobalTask');
+  const close = document.getElementById('closeModal');
+  const form = document.getElementById('taskForm');
+
+  if (btn) btn.addEventListener('click', () => modal.classList.remove('hidden'));
+  if (close) close.addEventListener('click', () => modal.classList.add('hidden'));
+  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('taskTitle').value,
+        description: document.getElementById('taskDesc').value,
+        category: document.getElementById('taskCategory').value,
+        priority: document.getElementById('taskPriority').value
+      };
+      try {
+        const res = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          form.reset();
+          modal.classList.add('hidden');
+          window.location.reload();
+        }
+      } catch (err) { console.error('Failed to create task', err); }
+    });
+  }
+});
+</script>

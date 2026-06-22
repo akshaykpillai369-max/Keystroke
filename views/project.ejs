@@ -1,0 +1,300 @@
+<%- include('partials/head', { title: project.name }) %>
+<%- include('partials/sidebar') %>
+
+<!-- Top Nav Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] flex justify-between items-center px-margin-desktop py-4 z-40 backdrop-blur-xl bg-surface-dim/30">
+  <div class="flex items-center gap-gutter flex-1">
+    <div class="relative w-96">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+      <input class="w-full bg-surface-container-low border-b border-outline-variant/30 py-2 pl-10 pr-4 text-on-surface font-label-md focus:border-primary focus:ring-0 transition-all outline-none" placeholder="Search tasks or insights..." type="text" />
+    </div>
+  </div>
+  <div class="flex items-center gap-6">
+    <div class="flex gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-2 rounded-full transition-all">notifications</button>
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-2 rounded-full transition-all">sparkles</button>
+    </div>
+    <div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
+      <span class="font-label-md text-primary font-bold">AI Assistant</span>
+      <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">A</div>
+    </div>
+  </div>
+</header>
+
+<!-- AI Drawer -->
+<aside class="fixed right-0 top-0 h-screen w-80 bg-surface-container-low/90 backdrop-blur-2xl border-l border-outline-variant/20 shadow-2xl shadow-primary/10 flex flex-col p-gutter z-50 overflow-hidden">
+  <div class="flex items-center gap-4 mb-8">
+    <div class="relative">
+      <div class="absolute inset-0 bg-secondary blur-lg opacity-20 animate-pulse"></div>
+      <div class="relative w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+      </div>
+    </div>
+    <div>
+      <h2 class="font-headline-lg text-headline-lg text-secondary">AI Assistant</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">How can I help you focus?</p>
+    </div>
+  </div>
+  <nav class="flex flex-col gap-2 mb-8">
+    <button class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-xl text-left transition-all" onclick="alert('Feature coming soon: Task Breakdown')">
+      <span class="material-symbols-outlined">account_tree</span>
+      <span class="font-label-caps uppercase">Task Breakdown</span>
+    </button>
+    <button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/30 rounded-xl text-left transition-all" onclick="alert('Feature coming soon: Suggested Times')">
+      <span class="material-symbols-outlined">schedule</span>
+      <span class="font-label-caps uppercase">Suggested Times</span>
+    </button>
+    <button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/30 rounded-xl text-left transition-all" onclick="alert('Feature coming soon: Resource Links')">
+      <span class="material-symbols-outlined">link</span>
+      <span class="font-label-caps uppercase">Resource Links</span>
+    </button>
+    <button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/30 rounded-xl text-left transition-all" onclick="alert('Feature coming soon: AI Insights')">
+      <span class="material-symbols-outlined">insights</span>
+      <span class="font-label-caps uppercase">AI Insights</span>
+    </button>
+  </nav>
+  <div class="flex-1 overflow-y-auto pr-2" style="scrollbar-width: thin;">
+    <div class="p-4 rounded-2xl bg-surface-variant/20 border border-outline-variant/10 ai-glow">
+      <div class="flex items-center gap-2 mb-4 text-secondary">
+        <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+        <span class="font-label-md font-bold uppercase tracking-widest">Analysis Ready</span>
+      </div>
+      <p class="text-on-surface-variant text-sm mb-6 leading-relaxed italic">"I've broken down this project into strategic steps based on your current bandwidth and dependencies."</p>
+      <ul class="space-y-4">
+        <% tasks.slice(0, 5).forEach((t, i) => { %>
+        <li class="flex items-start gap-3 group cursor-pointer">
+          <div class="w-6 h-6 rounded-full border-2 <%= i === 0 ? 'border-secondary' : 'border-outline-variant' %> flex items-center justify-center text-[10px] font-bold <%= i === 0 ? 'text-secondary' : 'text-on-surface-variant' %> flex-shrink-0 mt-0.5"><%= i + 1 %></div>
+          <div class="flex flex-col">
+            <span class="text-sm font-medium text-on-surface group-hover:text-secondary transition-colors"><%= t.title %></span>
+            <span class="text-[10px] text-on-surface-variant opacity-60 uppercase"><%= Math.floor(t.durationLogged / 60) || 0 %> MINS</span>
+          </div>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="ml-64 mr-80 pt-24 min-h-screen">
+  <div class="max-w-4xl mx-auto px-margin-desktop py-base">
+    <!-- Breadcrumbs -->
+    <div class="flex items-center gap-2 mb-6 text-on-surface-variant font-label-md opacity-60">
+      <a href="/projects" class="hover:text-primary transition-colors">Projects</a>
+      <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+      <span><%= project.name %></span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="px-3 py-1 <%= project.status === 'Active' ? 'bg-primary/20 text-primary' : 'bg-surface-container-high text-on-surface-variant' %> rounded font-label-caps"><%= project.status === 'Active' ? 'ACTIVE' : project.status.toUpperCase() %></span>
+      </div>
+      <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface mb-4"><%= project.name %></h2>
+      <% if (project.description) { %><p class="font-body-md text-on-surface-variant leading-relaxed max-w-2xl"><%= project.description %></p><% } %>
+    </div>
+
+    <!-- Bento Layout -->
+    <div class="grid grid-cols-12 gap-gutter">
+      <!-- AI Time Estimate -->
+      <div class="col-span-4 glass-card p-6 rounded-3xl flex flex-col justify-between border-primary/20 bg-gradient-to-br from-surface-container-low to-surface-dim">
+        <div class="flex items-center justify-between mb-4">
+          <span class="material-symbols-outlined text-secondary">timer</span>
+          <span class="font-label-caps text-secondary opacity-80 tracking-widest">AI ESTIMATE</span>
+        </div>
+        <div>
+          <div class="text-4xl font-bold text-on-surface mb-1"><%= Math.floor(tasks.reduce((s, t) => s + (t.durationLogged || 0), 0) / 60) || 0 %>m</div>
+          <p class="text-sm text-on-surface-variant opacity-70">Total Focus Time Logged</p>
+        </div>
+        <div class="mt-6 pt-6 border-t border-outline-variant/10">
+          <div class="flex items-center gap-2 text-primary font-label-md">
+            <span class="material-symbols-outlined text-[18px]">bolt</span>
+            <span><%= tasks.filter(t => t.status === 'In Progress').length %> in progress. Optimal focus window: 2:00 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Visual -->
+      <div class="col-span-8 glass-card p-6 rounded-3xl border-outline-variant/10">
+        <div class="flex items-center justify-between mb-8">
+          <h3 class="font-label-caps text-on-surface font-bold tracking-widest">OVERALL PROGRESS</h3>
+          <span class="text-primary font-label-md"><%= tasks.length > 0 ? Math.round(tasks.filter(t => t.status === 'Completed').length / tasks.length * 100) : 0 %>% Complete</span>
+        </div>
+        <div class="h-2 w-full bg-surface-container rounded-full overflow-hidden mb-8">
+          <div class="h-full bg-primary transition-all duration-1000 shadow-[0_0_10px_rgba(192,193,255,0.5)]" style="width: <%= tasks.length > 0 ? tasks.filter(t => t.status === 'Completed').length / tasks.length * 100 : 0 %>%"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <span class="block text-2xl font-bold text-on-surface"><%= tasks.filter(t => t.status === 'Completed').length %></span>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Done</span>
+          </div>
+          <div class="border-x border-outline-variant/10">
+            <span class="block text-2xl font-bold text-on-surface"><%= tasks.filter(t => t.status !== 'Completed').length %></span>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Remaining</span>
+          </div>
+          <div>
+            <span class="block text-2xl font-bold text-on-surface">0</span>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Blocked</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resource Links Section -->
+      <div class="col-span-12 glass-card p-gutter rounded-3xl border-outline-variant/10">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-label-caps text-on-surface font-bold tracking-widest">RESOURCE LINKS</h3>
+          <button class="text-primary hover:opacity-80 transition-opacity" onclick="alert('Feature coming soon: Add Resource Link')">
+            <span class="material-symbols-outlined">add_link</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <a class="flex items-center gap-4 p-4 rounded-2xl bg-surface-variant/30 border border-transparent hover:border-primary/30 transition-all group" href="javascript:alert('Opening document...')">
+            <div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined">description</span>
+            </div>
+            <div class="flex-1">
+              <span class="block font-label-md text-on-surface group-hover:text-primary transition-colors"><%= project.name %> Overview.pdf</span>
+              <span class="block text-[10px] text-on-surface-variant opacity-60">Last updated 2 days ago</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+          <a class="flex items-center gap-4 p-4 rounded-2xl bg-surface-variant/30 border border-transparent hover:border-primary/30 transition-all group" href="javascript:alert('Opening spreadsheet...')">
+            <div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-secondary">
+              <span class="material-symbols-outlined">table_chart</span>
+            </div>
+            <div class="flex-1">
+              <span class="block font-label-md text-on-surface group-hover:text-secondary transition-colors">Project Assets.xls</span>
+              <span class="block text-[10px] text-on-surface-variant opacity-60">Live Google Sheet</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tasks List -->
+      <div class="col-span-12 glass-card p-gutter rounded-3xl border-outline-variant/10">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-label-caps text-on-surface font-bold tracking-widest">TASKS</h3>
+          <button id="btnAddTaskToProject" class="text-primary hover:opacity-80 transition-opacity flex items-center gap-1">
+            <span class="material-symbols-outlined">add</span>
+            <span class="font-label-md">Add Task</span>
+          </button>
+        </div>
+        <div class="space-y-3">
+          <% tasks.forEach(t => { %>
+          <div class="glass-card p-4 rounded-xl flex items-center gap-4 group">
+            <button class="w-6 h-6 rounded-full <%= t.status === 'Completed' ? 'bg-primary border-primary' : 'border-2 border-outline-variant' %> flex items-center justify-center flex-shrink-0" onclick="updateTaskStatus('<%= t._id %>', '<%= t.status === 'Completed' ? 'Todo' : 'Completed' %>')">
+              <% if (t.status === 'Completed') { %><span class="material-symbols-outlined text-[16px] text-on-primary">check</span><% } %>
+            </button>
+            <div class="flex-1 min-w-0">
+              <h5 class="text-body-md font-medium text-on-surface <%= t.status === 'Completed' ? 'line-through opacity-60' : '' %>"><%= t.title %></h5>
+              <div class="flex items-center gap-3 mt-1">
+                <span class="font-label-caps <%= t.priority === 'Urgent' ? 'text-error' : t.priority === 'High' ? 'text-primary' : 'text-on-surface-variant' %>"><%= t.priority %></span>
+                <span class="font-label-caps text-on-surface-variant"><%= Math.floor(t.durationLogged / 60) %>m logged</span>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+          <% if (tasks.length === 0) { %>
+          <p class="text-center text-on-surface-variant text-sm py-8">No tasks yet. Add one to get started.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- AI Insights -->
+      <div class="col-span-12 bg-secondary/5 rounded-3xl p-gutter border border-secondary/10 flex items-start gap-gutter relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+        <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container flex-shrink-0 z-10">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">spark</span>
+        </div>
+        <div class="z-10">
+          <h3 class="font-label-md font-bold text-secondary mb-2 tracking-wide">AI PREDICTION</h3>
+          <p class="text-on-surface-variant leading-relaxed">"Based on previous similar projects, your team usually completes tasks 15% faster than estimated. I've adjusted your timeline accordingly."</p>
+          <div class="mt-4 flex gap-4">
+            <button class="px-4 py-2 bg-secondary text-on-secondary rounded-lg font-label-md font-bold hover:opacity-90 active:scale-[0.98] transition-all" onclick="alert('Buffer applied successfully.')">Apply Buffer</button>
+            <button class="px-4 py-2 text-on-surface-variant font-label-md hover:bg-white/5 active:scale-[0.98] rounded-lg transition-all" onclick="this.closest('.col-span-12').style.display='none'">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="mt-12 flex items-center justify-between py-8 border-t border-outline-variant/10">
+      <div class="flex items-center gap-4">
+        <button class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors" onclick="alert('Feature coming soon: Share Task')">
+          <span class="material-symbols-outlined">share</span>
+          <span class="font-label-md">Share Task</span>
+        </button>
+        <button class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors" onclick="alert('Feature coming soon: View History')">
+          <span class="material-symbols-outlined">history</span>
+          <span class="font-label-md">History</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="px-6 py-3 rounded-xl border border-outline-variant/30 text-on-surface font-semibold hover:bg-surface-variant/30 active:scale-[0.98] transition-all" onclick="updateProjectStatus('<%= project._id %>', '<%= project.status === 'Active' ? 'Paused' : 'Active' %>')"><%= project.status === 'Active' ? 'Pause Project' : 'Resume Project' %></button>
+        <button class="px-8 py-3 rounded-xl bg-primary text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all" onclick="updateProjectStatus('<%= project._id %>', 'Completed')">Mark Complete</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Add Task Modal -->
+<div id="addTaskModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] hidden" style="background: rgba(3, 20, 39, 0.8);">
+  <div class="glass-card p-8 rounded-3xl w-full max-w-md" style="background: rgba(16, 32, 52, 0.95);">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface">Add Task</h2>
+      <button id="closeAddTaskModal" class="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer">close</button>
+    </div>
+    <div class="space-y-3 max-h-80 overflow-y-auto">
+      <% availableTasks.forEach(t => { %>
+      <div class="p-4 rounded-xl cursor-pointer bg-surface-variant/30 hover:bg-surface-variant/60 transition-colors available-task-item" data-task-id="<%= t._id %>">
+        <p class="text-sm font-medium text-on-surface"><%= t.title %></p>
+        <p class="text-xs text-on-surface-variant"><%= t.category %> &middot; <%= t.priority %></p>
+      </div>
+      <% }) %>
+      <% if (availableTasks.length === 0) { %>
+      <p class="text-center text-on-surface-variant text-sm py-4">No unassigned tasks available</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+<script>
+function updateTaskStatus(id, status) {
+  fetch('/api/tasks/' + id, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) })
+    .then(() => window.location.reload());
+}
+function updateProjectStatus(id, status) {
+  fetch('/api/projects/' + id + '/status', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) })
+    .then(() => window.location.reload());
+}
+// Intersection observer for fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.glass-card').forEach(card => {
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(20px)';
+  card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+  observer.observe(card);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const addModal = document.getElementById('addTaskModal');
+  const btnAdd = document.getElementById('btnAddTaskToProject');
+  const closeAdd = document.getElementById('closeAddTaskModal');
+  if (btnAdd) btnAdd.addEventListener('click', () => addModal.classList.remove('hidden'));
+  if (closeAdd) closeAdd.addEventListener('click', () => addModal.classList.add('hidden'));
+  if (addModal) addModal.addEventListener('click', (e) => { if (e.target === addModal) addModal.classList.add('hidden'); });
+  document.querySelectorAll('.available-task-item').forEach(el => {
+    el.addEventListener('click', async () => {
+      await fetch('/api/projects/<%= project._id %>/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ taskId: el.dataset.taskId }) });
+      window.location.reload();
+    });
+  });
+});
+</script>
+</body>
+</html>

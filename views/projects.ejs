@@ -1,0 +1,114 @@
+<%- include('partials/head', { title: 'Projects' }) %>
+<%- include('partials/sidebar') %>
+
+<!-- Top Nav Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] flex justify-between items-center px-margin-desktop py-4 z-40 backdrop-blur-xl bg-surface-dim/30">
+  <div class="flex items-center gap-gutter flex-1">
+    <div class="relative w-96">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+      <input class="w-full bg-surface-container-low border-b border-outline-variant/30 py-2 pl-10 pr-4 text-on-surface font-label-md focus:border-primary focus:ring-0 transition-all outline-none" placeholder="Search tasks or insights..." type="text" />
+    </div>
+  </div>
+  <div class="flex items-center gap-6">
+    <div class="flex gap-4">
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-2 rounded-full transition-all">notifications</button>
+      <button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 p-2 rounded-full transition-all">sparkles</button>
+    </div>
+    <div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
+      <span class="font-label-md text-primary font-bold">AI Assistant</span>
+      <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">A</div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="ml-64 pt-24 pb-12 px-margin-desktop">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Projects</h2>
+        <p class="text-on-surface-variant mt-1">Manage and track your project workflows</p>
+      </div>
+      <button id="btnNewProject" class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-semibold hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+        <span class="material-symbols-outlined">add</span>
+        New Project
+      </button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <% projects.forEach((p, i) => { %>
+      <a href="/project/<%= p._id %>" class="glass-card p-6 rounded-3xl block group" style="animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) <%= i * 0.1 %>s both;">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-surface-container-highest rounded-2xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary">folder_open</span>
+          </div>
+          <span class="px-3 py-1 rounded-full font-label-caps <%= p.status === 'Active' ? 'bg-primary/20 text-primary' : p.status === 'Paused' ? 'bg-tertiary/20 text-tertiary' : 'bg-outline-variant/20 text-on-surface-variant' %>"><%= p.status %></span>
+        </div>
+        <h3 class="font-headline-lg text-headline-lg text-on-surface mb-2 group-hover:text-primary transition-colors"><%= p.name %></h3>
+        <% if (p.description) { %><p class="text-body-sm text-on-surface-variant mb-4 line-clamp-2"><%= p.description %></p><% } %>
+        <div class="flex items-center justify-between pt-4 border-t border-outline-variant/10">
+          <span class="text-sm text-on-surface-variant"><%= p.tasks ? p.tasks.length : 0 %> tasks</span>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-primary">Velocity: <%= p.aiHealthMetrics.velocity %>%</span>
+            <% if (p.aiHealthMetrics.blockersDetected) { %>
+            <span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+            <% } %>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+      <% if (projects.length === 0) { %>
+      <div class="col-span-2 text-center py-16 glass-card rounded-3xl">
+        <span class="material-symbols-outlined text-5xl text-on-surface-variant mb-4">folder_off</span>
+        <p class="text-on-surface-variant">No projects yet. Create your first one!</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</main>
+
+<!-- Project Modal -->
+<div id="projectModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] hidden" style="background: rgba(3, 20, 39, 0.8);">
+  <div class="glass-card p-8 rounded-3xl w-full max-w-md" style="background: rgba(16, 32, 52, 0.95);">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface">Create Project</h2>
+      <button id="closeProjectModal" class="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer">close</button>
+    </div>
+    <form id="projectForm" class="space-y-4">
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant block mb-2">Project Name</label>
+        <input id="projectName" type="text" required placeholder="Enter project name" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface font-body-md focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none" />
+      </div>
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant block mb-2">Description</label>
+        <textarea id="projectDesc" rows="2" placeholder="Optional description..." class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface font-body-md focus:ring-2 focus:ring-primary/30 focus:border-primary/50 outline-none"></textarea>
+      </div>
+      <button type="submit" class="w-full py-3 bg-primary text-on-primary font-semibold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20">Create Project</button>
+    </form>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('projectModal');
+  const btn = document.getElementById('btnNewProject');
+  const close = document.getElementById('closeProjectModal');
+  const form = document.getElementById('projectForm');
+  if (btn) btn.addEventListener('click', () => modal.classList.remove('hidden'));
+  if (close) close.addEventListener('click', () => modal.classList.add('hidden'));
+  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = { name: document.getElementById('projectName').value, description: document.getElementById('projectDesc').value };
+      const res = await fetch('/api/projects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (res.ok) { form.reset(); modal.classList.add('hidden'); window.location.reload(); }
+    });
+  }
+});
+</script>
+</body>
+</html>
